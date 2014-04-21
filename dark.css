@@ -1,0 +1,23 @@
+/*
+    CODEMIRROR CURSOR
+*/
+
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 2px solid #268bd2;
+  z-index: 3;
+}
+
+/*
+    COLORS
+*/
+
+.cm-s-ipython { background-color: #002b36; color: #839496; }
+.cm-s-ipython span.cm-keyword {color: #859900; font-weight: bold;}
+.cm-s-ipython span.cm-number {color: #b58900;}
+.cm-s-ipython span.cm-operator {color: #268bd2; font-weight: bold;}
+.cm-s-ipython span.cm-meta {color: #cb4b16;}
+.cm-s-ipython span.cm-comment {color: #586e75; font-style: italic;}
+.cm-s-ipython span.cm-string {color: #2aa198;}
+.cm-s-ipython span.cm-error {color: #dc322f;}
+.cm-s-ipython span.cm-builtin {color: #cb4b16;}
+.cm-s-ipython span.cm-variable {color: #839496;}
