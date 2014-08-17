@@ -1,11 +1,15 @@
-# Toggle between two IPython notebook themes
+# IPython Extensions
+
+Work in progress.
+
+## Notebook theme toggle
 
 IPython notebook extension to toggle between two CSS themes, `theme_default.css` and `theme_alt.css`. If `theme_default.css` is not found, no CSS is loaded for the default setting, i.e. only the pre-installed default theme is used.
 
 Installation:
 
-    $ curl -L https://raw.github.com/sjpfenninger/ipython-theme-toggle/master/theme_toggle.js > $(ipython locate)/nbextensions/theme_toggle.js
-    $ curl -L https://raw.github.com/sjpfenninger/ipython-theme-toggle/master/theme_alt.css > $(ipython locate)/nbextensions/theme_alt.css
+    $ curl -L https://raw.github.com/sjpfenninger/ipython-extensions/master/nbextensions/theme_toggle.js > $(ipython locate)/nbextensions/theme_toggle.js
+    $ curl -L https://raw.github.com/sjpfenninger/ipython-extensions/master/nbextensions/theme_alt.css > $(ipython locate)/nbextensions/theme_alt.css
 
 Then, load it with the following code in your `custom.js`:
 
