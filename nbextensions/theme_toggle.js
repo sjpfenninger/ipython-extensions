@@ -24,7 +24,7 @@ define(["require"], function (require) {
       IPython.toolbar.add_buttons_group([
         {
           'label'   : 'Toggle Bright/Dark Mode',
-          'icon'    : 'icon-adjust',
+          'icon'    : 'fa-adjust',
           'callback': theme_toggle,
           'id'      : 'theme-toggle-button'
         },

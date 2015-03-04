@@ -19,7 +19,9 @@ Installation:
 Then, load it with the following code in your `custom.js`:
 
 ```javascript
-IPython.load_extensions('theme_toggle');
+$([IPython.events]).on("app_initialized.NotebookApp", function () {
+    IPython.load_extensions('theme_toggle');
+});
 ```
 
 To load the alternative theme (`theme_alt.css`) by default, add the following after the loading code:
@@ -59,7 +61,9 @@ Installation:
 Then, load it with the following code in your `custom.js`:
 
 ```javascript
-IPython.load_extensions('notify');
+$([IPython.events]).on("app_initialized.NotebookApp", function () {
+    IPython.load_extensions('notify');
+});
 ```
 
 ## License

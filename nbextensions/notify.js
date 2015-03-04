@@ -26,7 +26,7 @@ define(["require"], function (require) {
     var label = $('<span/>').addClass("navbar-text permissions-list").text('Notify:');
     var select = $('<select/>')
                   .attr('id', 'permissions-select')
-                  .attr('class', 'permissions-list')
+                  .attr('class', 'permissions-list form-control select-xs')
                   .append($('<option/>')
                   .attr('value', 'Disabled')
                   .text('Disabled'));
@@ -48,6 +48,8 @@ define(["require"], function (require) {
       var name = presets[i];
       select.append($('<option/>').attr('value', name).text(name));
     }
+    // Finally, restore the selected option if it was saved in notebook metadata
+    restore_state();
   };
 
   var add_permissions_button = function () {
@@ -55,7 +57,7 @@ define(["require"], function (require) {
       IPython.toolbar.add_buttons_group([
         {
           'label'   : 'Grant Notification Permissions',
-          'icon'    : 'icon-ok',
+          'icon'    : 'fa-check',
           'callback': ask_permission,
           'id'      : 'permissions-button'
         },
@@ -64,17 +66,15 @@ define(["require"], function (require) {
   };
 
   var ensure_permission = function () {
-    $([IPython.events]).on("app_initialized.NotebookApp", function () {
-      ask_permission();  // Asks for permission on notebook load, doesn't work in Chrome
-      // If don't have permission now, add a button to the toolbar to let user request permission
-      if (Notification && Notification.permission !== "granted") {
-        add_permissions_button();
-        add_permissions_list();
-        $(".permissions-list").hide();
-      } else if (Notification && Notification.permission === "granted") {
-        add_permissions_list();
-      }
-    });
+    ask_permission();  // Asks for permission on notebook load, doesn't work in Chrome
+    // If don't have permission now, add a button to the toolbar to let user request permission
+    if (Notification && Notification.permission !== "granted") {
+      add_permissions_button();
+      add_permissions_list();
+      $(".permissions-list").hide();
+    } else if (Notification && Notification.permission === "granted") {
+      add_permissions_list();
+    }
   };
 
   var ask_permission = function () {
@@ -92,11 +92,10 @@ define(["require"], function (require) {
     }
   };
 
-
   var notify = function () {
     var elapsed_time = current_time() - start_time;
     if (enabled && !first_start && !busy_kernel && elapsed_time >= min_time) {
-      var n = new Notification(IPython.notebook.notebook_name, {body: "Kernel is now idle\n(" + Math.round(elapsed_time) + " secs)"});
+      var n = new Notification(IPython.notebook.notebook_name, {body: "Kernel is now idle\n(ran for " + Math.round(elapsed_time) + " secs)"});
     }
     if (first_start) {
       first_start = false;
@@ -121,30 +120,28 @@ define(["require"], function (require) {
   };
 
   var restore_state = function () {
-    $([IPython.events]).on("notebook_loaded.Notebook", function () {
-      load_state();
-      // Only proceed if the permissions selector is being shown
-      if ($("#permissions-select").length > 0) {
-        if (!enabled) {
-          $("#permissions-select").val("Disabled");
-        } else {
-          $("#permissions-select").val(min_time);
-        }
+    load_state();
+    // Only proceed if the permissions selector is being shown
+    if ($("#permissions-select").length > 0) {
+      if (!enabled) {
+        $("#permissions-select").val("Disabled");
+      } else {
+        $("#permissions-select").val(min_time);
       }
-    });
+    }
   };
 
   var setup_notifier = function () {
-    $([IPython.events]).on('status_restarting.Kernel',function () {
+    $([IPython.events]).on('kernel_starting.Kernel',function () {
       first_start = true;  // reset first_start status when restarting the kernel
     });
 
-    $([IPython.events]).on('status_busy.Kernel',function () {
+    $([IPython.events]).on('kernel_busy.Kernel',function () {
       busy_kernel = true;
       start_time = current_time();  // reset the timer
     });
 
-    $([IPython.events]).on('status_idle.Kernel',function () {
+    $([IPython.events]).on('kernel_idle.Kernel',function () {
       busy_kernel = false;  // Used to make sure that kernel doesn't go busy again within the timeout set below.
       setTimeout(notify, 500);
     });
@@ -153,7 +150,6 @@ define(["require"], function (require) {
   var load_ipython_extension = function () {
     ensure_permission();
     setup_notifier();
-    restore_state();
   };
 
   return {
