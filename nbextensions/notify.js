@@ -96,6 +96,7 @@ define(["require"], function (require) {
     var elapsed_time = current_time() - start_time;
     if (enabled && !first_start && !busy_kernel && elapsed_time >= min_time) {
       var n = new Notification(IPython.notebook.notebook_name, {body: "Kernel is now idle\n(ran for " + Math.round(elapsed_time) + " secs)"});
+      n.onclick = function(event){ window.focus(); }
     }
     if (first_start) {
       first_start = false;
