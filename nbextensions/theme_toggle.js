@@ -37,7 +37,7 @@ define(["require"], function (require) {
       $([IPython.events]).on("app_initialized.NotebookApp", theme_toggle_shortcut);
       return;
     }
-    IPython.keyboard_manager.command_shortcuts.add_shortcut('t', {
+    IPython.keyboard_manager.edit_shortcuts.add_shortcut('t', {
       help : 'toggle theme',
       help_index : 't',
       handler : function (event) {
